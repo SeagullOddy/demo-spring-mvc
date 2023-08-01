@@ -5,6 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan("com.oddy.demossm.controller")
-public class ApplicationCinfig {
+public class ApplicationConfig {
 
 }
