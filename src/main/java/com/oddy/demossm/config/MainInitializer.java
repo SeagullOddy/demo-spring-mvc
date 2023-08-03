@@ -2,7 +2,10 @@ package com.oddy.demossm.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-// 相当于 web.xml 的 Java 版，且使用 DispatcherServlet 作为前端控制器
+// 有了 SpringMVC 之后，不需要一个请求一个 Servlet 了，
+// 它使用 DispatcherServlet 替代 Tomcat 提供的默认的静态 Servlet，
+// 现在除了 jsp，所有的请求都由 DispatcherServlet 处理。
+// Initializer 相当于 web.xml 的 Java 版
 public class MainInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
   /**
