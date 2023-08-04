@@ -9,4 +9,8 @@ public class User {
 
   private String password;
 
+  public String toSuperString() {
+    return super.toString();
+  }
+
 }

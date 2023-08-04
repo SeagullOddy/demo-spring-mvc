@@ -1,10 +1,17 @@
 package com.oddy.demossm.config;
 
+import com.oddy.demossm.entity.User;
+import com.oddy.demossm.interceptor.MainInterceptor;
+import com.oddy.demossm.interceptor.SubInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring6.ISpringTemplateEngine;
@@ -51,6 +58,29 @@ public class WebConfig implements WebMvcConfigurer {
     return engine;
   }
 
+  // 5. Bean 的 Web 作用域
+  @Bean
+  // 请求作用域，每次请求都会创建一个新的实例
+  @RequestScope
+  @Scope("prototype")
+  public User userRequest() {
+    User user = new User();
+    user.setUsername("Oddy Request");
+    user.setPassword("123");
+    return user;
+  }
+
+  @Bean
+  // 会话作用域，每次会话都会创建一个新的实例
+  @SessionScope
+  @Scope("prototype")
+  public User userSession() {
+    User user = new User();
+    user.setUsername("Oddy Session");
+    user.setPassword("456");
+    return user;
+  }
+
   // 开启默认 Servlet 支持
   @Override
   public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -61,6 +91,16 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+  }
+
+  // 配置拦截器
+  // 多级拦截器会按一定顺序执行，
+  // 默认先添加的先 preHandle，后添加的先 postHandle、afterCompletion
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    // 可以用 order 方法指定拦截器的执行顺序
+    registry.addInterceptor(new MainInterceptor()).addPathPatterns("/**");
+    registry.addInterceptor(new SubInterceptor()).addPathPatterns("/**");
   }
 
 }
