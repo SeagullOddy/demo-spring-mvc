@@ -1,5 +1,8 @@
 package com.oddy.demossm.config;
 
+import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.ServletRegistration.Dynamic;
+import java.io.File;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 // 有了 SpringMVC 之后，不需要一个请求一个 Servlet 了，
@@ -11,7 +14,7 @@ public class MainInitializer extends AbstractAnnotationConfigDispatcherServletIn
   /**
    * 定义基本的配置类，一般用于业务层
    *
-   * @return
+   * @return 配置类
    */
   @Override
   protected Class<?>[] getRootConfigClasses() {
@@ -21,7 +24,7 @@ public class MainInitializer extends AbstractAnnotationConfigDispatcherServletIn
   /**
    * 配置 DispatcherServlet 的配置类，一般用于 Controller 层等
    *
-   * @return
+   * @return 配置类
    */
   @Override
   protected Class<?>[] getServletConfigClasses() {
@@ -31,6 +34,20 @@ public class MainInitializer extends AbstractAnnotationConfigDispatcherServletIn
   @Override
   protected String[] getServletMappings() {
     return new String[]{"/"};
+  }
+
+  /**
+   * 通过 Registration 配置 Mutipart 相关配置，实现文件上传
+   *
+   * @param registration the {@code DispatcherServlet} registration to be customized
+   */
+  @Override
+  protected void customizeRegistration(Dynamic registration) {
+    File file = new File("C:/Users/Oddy/Downloads/uploads/");
+    if (!file.exists()) {
+      file.mkdirs();
+    }
+    registration.setMultipartConfig(new MultipartConfigElement(file.getAbsolutePath()));
   }
 
 }

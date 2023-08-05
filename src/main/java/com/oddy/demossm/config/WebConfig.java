@@ -1,12 +1,15 @@
 package com.oddy.demossm.config;
 
+import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
 import com.oddy.demossm.entity.User;
-import com.oddy.demossm.interceptor.MainInterceptor;
-import com.oddy.demossm.interceptor.SubInterceptor;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -99,8 +102,45 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     // 可以用 order 方法指定拦截器的执行顺序
-    registry.addInterceptor(new MainInterceptor()).addPathPatterns("/**");
-    registry.addInterceptor(new SubInterceptor()).addPathPatterns("/**");
+//    registry.addInterceptor(new MainInterceptor()).addPathPatterns("/**");
+//    registry.addInterceptor(new SubInterceptor()).addPathPatterns("/**");
+  }
+
+  // 配置消息转换器
+  @Override
+  public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    // FastJson 消息转换器，默认支持的 MediaType 为：*/*，
+    // SpringMVC 出于安全考虑，不允许使用 */*，所以需要手动配置
+    FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+    List<MediaType> mediaTypes = new ArrayList<>();
+    mediaTypes.add(MediaType.APPLICATION_JSON);
+    mediaTypes.add(MediaType.APPLICATION_XML);
+    mediaTypes.add(MediaType.APPLICATION_OCTET_STREAM);
+    mediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
+    mediaTypes.add(MediaType.APPLICATION_ATOM_XML);
+    mediaTypes.add(MediaType.APPLICATION_XHTML_XML);
+    mediaTypes.add(MediaType.APPLICATION_PDF);
+    mediaTypes.add(MediaType.APPLICATION_RSS_XML);
+    mediaTypes.add(MediaType.APPLICATION_GRAPHQL_RESPONSE);
+    mediaTypes.add(MediaType.APPLICATION_CBOR);
+    mediaTypes.add(MediaType.APPLICATION_NDJSON);
+    mediaTypes.add(MediaType.APPLICATION_PROBLEM_JSON);
+    mediaTypes.add(MediaType.APPLICATION_PROBLEM_XML);
+    mediaTypes.add(MediaType.APPLICATION_PROTOBUF);
+    mediaTypes.add(MediaType.IMAGE_GIF);
+    mediaTypes.add(MediaType.IMAGE_JPEG);
+    mediaTypes.add(MediaType.IMAGE_PNG);
+    mediaTypes.add(MediaType.MULTIPART_MIXED);
+    mediaTypes.add(MediaType.MULTIPART_RELATED);
+    mediaTypes.add(MediaType.MULTIPART_FORM_DATA);
+    mediaTypes.add(MediaType.TEXT_PLAIN);
+    mediaTypes.add(MediaType.TEXT_HTML);
+    mediaTypes.add(MediaType.TEXT_XML);
+    mediaTypes.add(MediaType.TEXT_MARKDOWN);
+    mediaTypes.add(MediaType.TEXT_EVENT_STREAM);
+    converter.setSupportedMediaTypes(mediaTypes);
+
+    converters.add(converter);
   }
 
 }
