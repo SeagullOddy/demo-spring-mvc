@@ -1,4 +1,5 @@
-# demo-ssm
+# demo-ss
 
-Spring MVC 基础学习 demo。
-Spring MVC basic learning demo.
+Spring & Spring MVC 基础学习 demo。
+
+Spring & Spring MVC basic learning demo.
