@@ -1,4 +1,4 @@
-# demo-ss
+# Spring & Spring MVC Demo
 
 Spring & Spring MVC 基础学习 demo。
 
